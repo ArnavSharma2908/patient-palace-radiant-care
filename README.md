@@ -77,7 +77,24 @@ npm install
    - Make sure `your_database_name` matches the `DB_NAME` value in your `.env` file.
 
 2. **Create the Patients Table:**
-   - Use the provided `patients.sql` file to create the required table:
+   - You can create the `Patients` table by running the following SQL command:
+   ```sql
+   CREATE TABLE IF NOT EXISTS Patients (
+       id VARCHAR(64) NOT NULL PRIMARY KEY,
+       name VARCHAR(255) NOT NULL,
+       gender ENUM('Male','Female','Other') NOT NULL,
+       dateOfBirth DATE NOT NULL,
+       phoneNumber VARCHAR(32),
+       bloodType VARCHAR(8),
+       medicalConditions TEXT,
+       medications TEXT,
+       allergies TEXT,
+       notes TEXT,
+       registrationDate DATE,
+       lastVisit DATE
+   );
+   ```
+   - Alternatively, you can use the provided `patients.sql` file to create the table:
    ```sql
    SOURCE patients.sql;
    ```
