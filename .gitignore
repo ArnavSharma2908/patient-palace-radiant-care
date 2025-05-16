@@ -1,0 +1,70 @@
+# Node.js dependencies
+node_modules/
+BackEnd/node_modules/
+FrontEnd/node_modules/
+
+# Build output
+BackEnd/dist/
+FrontEnd/dist/
+FrontEnd/dist-ssr/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files
+.env
+.env.*
+!BackEnd/.env.example
+!FrontEnd/.env.example
+BackEnd/.env
+FrontEnd/.env
+
+# Editor and system files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Bun lock file (if not needed in repo)
+FrontEnd/bun.lockb
+
+# Misc
+*.local
+
+# Test coverage
+coverage/
+
+# Build cache
+.cache/
+
+# Output from package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+BackEnd/package-lock.json
+FrontEnd/package-lock.json
+BackEnd/yarn.lock
+FrontEnd/yarn.lock
+BackEnd/pnpm-lock.yaml
+FrontEnd/pnpm-lock.yaml
+
+# TypeScript build info
+FrontEnd/tsconfig.tsbuildinfo
+BackEnd/tsconfig.tsbuildinfo
+
+# Ignore static uploads and generated images (optional, if not needed in repo)
+# FrontEnd/public/uploads/
+# FrontEnd/public/images/
