@@ -209,7 +209,6 @@ By default, the backend runs on `http://localhost:3001` and the frontend on `htt
 - shadcn-ui (Radix UI + Tailwind CSS)
 - React Router DOM
 - TanStack React Query
-- Supabase (for API interaction)
 
 **Backend:**
 - Node.js
