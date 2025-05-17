@@ -2,6 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mysql from 'mysql2/promise';
+import { spawn } from 'child_process';
+import path from 'path';
+
+// Polyfill __dirname for ES modules
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment variables
 dotenv.config();
@@ -65,6 +72,42 @@ function toSqlDate(date) {
   }
 }
 
+// Helper: call whatsapp_sender.py with patient data as tuple
+function callPyWithPatient(patient, action) {
+  const tupleArgs = [
+    patient.id,
+    patient.name,
+    patient.gender,
+    patient.dateOfBirth,
+    patient.phoneNumber,
+    patient.bloodType,
+    Array.isArray(patient.medicalConditions) ? patient.medicalConditions.join(', ') : patient.medicalConditions,
+    Array.isArray(patient.medications) ? patient.medications.join(', ') : patient.medications,
+    Array.isArray(patient.allergies) ? patient.allergies.join(', ') : patient.allergies,
+    patient.notes || '',
+    patient.registrationDate || '',
+    patient.lastVisit || '',
+    action
+  ];
+  try {
+    const py = spawn('python', [path.join(__dirname, 'whatsapp_sender.py'), ...tupleArgs.map(String)]);
+    py.stdout.on('data', (data) => {
+      console.log(`whatsapp_sender.py stdout: ${data}`);
+    });
+    py.stderr.on('data', (data) => {
+      console.error(`whatsapp_sender.py stderr: ${data}`);
+    });
+    py.on('close', (code) => {
+      if (code !== 0) {
+        console.error(`whatsapp_sender.py process exited with code ${code}`);
+      }
+    });
+  } catch (err) {
+    // Log error but do not interrupt main flow
+    console.error('Error calling whatsapp_sender.py:', err);
+  }
+}
+
 // GET all patients
 app.get('/patients', async (req, res) => {
   try {
@@ -124,6 +167,8 @@ app.post('/patients', async (req, res) => {
     row.medicalConditions = row.medicalConditions ? row.medicalConditions.split(',').map(s => s.trim()) : [];
     row.medications = row.medications ? row.medications.split(',').map(s => s.trim()) : [];
     row.allergies = row.allergies ? row.allergies.split(',').map(s => s.trim()) : [];
+    // Call py file with the new patient data
+    callPyWithPatient(row,'created');
     res.status(201).json(row);
   } catch (err) {
     res.status(500).json({ error: 'Database error' });
@@ -171,6 +216,9 @@ app.put('/patients/:id', async (req, res) => {
     updatedPatient.medicalConditions = updatedPatient.medicalConditions ? updatedPatient.medicalConditions.split(',').map(s => s.trim()) : [];
     updatedPatient.medications = updatedPatient.medications ? updatedPatient.medications.split(',').map(s => s.trim()) : [];
     updatedPatient.allergies = updatedPatient.allergies ? updatedPatient.allergies.split(',').map(s => s.trim()) : [];
+
+    // Call py file with the updated patient data
+    callPyWithPatient(updatedPatient,'updated');
 
     res.json(updatedPatient);
   } catch (err) {
