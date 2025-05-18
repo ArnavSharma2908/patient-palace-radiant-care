@@ -35,7 +35,7 @@ const PatientCard: React.FC<PatientCardProps> = ({ patient }) => {
               <User className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-lg text-gray-900">{patient.name}</h3>
+              <div className="font-bold text-lg mb-1 dark:text-zinc-100">{patient.name}</div>
               <p className="text-sm text-gray-500">
                 {patient.gender}, {calculateAge(patient.dateOfBirth)} years
               </p>

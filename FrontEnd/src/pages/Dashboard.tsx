@@ -55,8 +55,8 @@ const Dashboard = () => {
         </div>
       </div>
       
-      <div className="bg-medical-50 rounded-xl p-6 fade-in">
-        <h2 className="text-lg font-medium mb-4">Quick Actions</h2>
+      <div className="bg-medical-50 rounded-xl p-6 fade-in dark:bg-[#1a2130]">
+        <h2 className="text-lg font-medium mb-4 dark:text-zinc-100">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
           <Link to="/patients/add">
             <Button>
